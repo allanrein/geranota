@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nota SAP — Solicitação de Manutenção</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ['"IBM Plex Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace']
+        }
+      }
+    }
+  };
+</script>
+<style>
+  /* Pequenos detalhes que o Tailwind puro não cobre bem */
+  input[type="checkbox"], input[type="radio"]{ accent-color: #f2a71b; }
+  ::selection{ background: rgba(242,167,27,.35); }
+</style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 font-sans leading-relaxed [background-image:linear-gradient(180deg,rgba(242,167,27,0.06),transparent_220px)] px-4 py-8 sm:py-0">
+<div class="max-w-[1000px] mx-auto pb-0">
+
+  <header class="flex items-end justify-between gap-4 flex-wrap border-b-[3px] border-amber-400 pb-3.5 mb-7">
+    <div>
+      <span class="font-mono text-xs tracking-[.12em] text-amber-400 uppercase">Manutenção · Solicitação de Serviço</span>
+      <h1 class="mt-1 text-2xl sm:text-3xl font-bold tracking-tight">Nota SAP</h1>
+    </div>
+    <div class="font-mono text-xs text-slate-400 text-right" id="metaData"></div>
+  </header>
+
+  <form id="notaForm" novalidate class="flex flex-col gap-5">
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">01</span>Descrição da Avaria</legend>
+      <div>
+        <label for="avaria" class="block text-sm text-slate-400 mb-1.5">Descreva a falha identificada</label>
+        <textarea id="avaria" name="avaria" class="w-full min-h-[64px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">02</span>Trabalho a Ser Executado</legend>
+      <div>
+        <label for="trabalho" class="block text-sm text-slate-400 mb-1.5">Descreva o serviço a ser realizado</label>
+        <textarea id="trabalho" name="trabalho" class="w-full min-h-[64px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">03</span>Tag em Bloqueio</legend>
+      <div>
+        <label for="tagBloqueio" class="block text-sm text-slate-400 mb-1.5">Tag do equipamento bloqueado</label>
+        <input type="text" id="tagBloqueio" name="tagBloqueio" placeholder="Ex.: MR.0944.02"
+               class="w-full bg-slate-800 border border-slate-700 rounded text-slate-100 text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400">
+      </div>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">04</span>Mão de Obra Interna (Arauco) / Hrs</legend>
+      <div class="hidden sm:grid grid-cols-[190px_90px_90px_1fr] gap-2.5 text-[11px] uppercase tracking-wide text-slate-400 pb-2 border-b border-slate-700 mb-2.5">
+        <span>Função</span><span>Qtd.</span><span>Hrs</span><span>Serviço</span>
+      </div>
+      <div id="interna"></div>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">05</span>Mão de Obra Externa (Terceiro) / Hrs</legend>
+      <div class="hidden sm:grid grid-cols-[190px_90px_90px_1fr] gap-2.5 text-[11px] uppercase tracking-wide text-slate-400 pb-2 border-b border-slate-700 mb-2.5">
+        <span>Função</span><span>Qtd.</span><span>Hrs</span><span>Serviço</span>
+      </div>
+      <div id="externa"></div>
+      <div class="flex items-center flex-wrap gap-2.5 pt-2.5 mt-1.5 border-t border-slate-700">
+        <label class="flex items-center gap-2 cursor-pointer select-none basis-[190px] flex-none text-sm font-semibold" for="pacoteChk">
+          <input type="checkbox" id="pacoteChk" class="w-5 h-5 cursor-pointer"> Contratar Pacote
+        </label>
+        <span class="text-xs text-slate-400">(anexar escopo da nota)</span>
+      </div>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">06</span>Recursos / Horas</legend>
+      <div id="recursos"></div>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">07</span>NRs Obrigatórias</legend>
+      <div class="flex flex-wrap gap-5" id="nrsList"></div>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">08</span>Tempo Total do Serviço</legend>
+      <div class="flex items-center gap-3">
+        <label for="tempoTotal" class="text-sm text-slate-400 m-0">Horas totais</label>
+        <input type="number" id="tempoTotal" name="tempoTotal" min="0" step="0.5"
+               class="w-[110px] bg-slate-800 border border-slate-700 rounded text-slate-100 text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400">
+      </div>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">09</span>Material com Cadastro</legend>
+      <div id="materiaisCadastro"></div>
+      <button type="button" id="btnAddCadastro"
+              class="mt-3 bg-transparent text-sky-400 border border-dashed border-sky-400 rounded px-4 py-2 text-sm hover:bg-sky-400/10">+ Adicionar material</button>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">10</span>Material sem Cadastro</legend>
+      <!--<div class="font-mono text-xs text-slate-400 -mt-1 mb-3">N° da ID (Solicitação) · Descrição · Quantidade</div>-->
+      <div id="materiaisSemCadastro"></div>
+      <button type="button" id="btnAddSemCadastro"
+              class="mt-3 bg-transparent text-sky-400 border border-dashed border-sky-400 rounded px-4 py-2 text-sm hover:bg-sky-400/10">+ Adicionar material</button>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">11</span>Lista de Ferramentas Arauco</legend>
+      <div>
+        <label for="ferramentasArauco" class="block text-sm text-slate-400 mb-1.5">Uma ferramenta por linha</label>
+        <textarea id="ferramentasArauco" name="ferramentasArauco" placeholder="Ex.: Chave de torque&#10;Multímetro"
+                  class="w-full min-h-[64px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">12</span>Lista de Ferramentas a Ser Alugada</legend>
+      <div>
+        <label for="ferramentasAlugadas" class="block text-sm text-slate-400 mb-1.5">Uma ferramenta por linha</label>
+        <textarea id="ferramentasAlugadas" name="ferramentasAlugadas" placeholder="Ex.: Plataforma elevatória"
+                  class="w-full min-h-[64px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+      <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">13</span>Histórico</legend>
+      <div>
+        <label for="historico" class="block text-sm text-slate-400 mb-1.5">Um registro por linha</label>
+        <textarea id="historico" name="historico" placeholder="Ex.: 12/08 — Ocorrência anterior semelhante"
+                  class="w-full min-h-[64px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+      </div>
+    </fieldset>
+
+    <div class="sticky bottom-0 flex flex-wrap gap-3 pt-4 pb-1 [background:linear-gradient(180deg,transparent,rgb(2_6_23)_35%)]">
+      <button type="button" id="btnGerar"
+              class="font-sans text-sm font-semibold px-5 py-2.5 rounded border border-amber-400 bg-amber-400 text-amber-950 hover:brightness-110 active:translate-y-px transition">Gerar nota</button>
+      <button type="button" id="btnCopiar"
+              class="font-sans text-sm font-semibold px-5 py-2.5 rounded border border-slate-700 bg-slate-800 text-slate-100 hover:border-sky-400 active:translate-y-px transition">Copiar texto</button>
+      <button type="button" id="btnBaixar"
+              class="font-sans text-sm font-semibold px-5 py-2.5 rounded border border-slate-700 bg-slate-800 text-slate-100 hover:border-sky-400 active:translate-y-px transition">Baixar .txt</button>
+      <button type="button" id="btnLimpar"
+              class="font-sans text-sm font-semibold px-5 py-2.5 rounded border border-red-400 bg-transparent text-red-400 hover:bg-red-400/10 active:translate-y-px transition ml-auto">Limpar formulário</button>
+    </div>
+  </form>
+
+  <section class="mt-4" aria-live="polite">
+    <h2 class="font-mono text-xs tracking-wider uppercase text-sky-400 mb-2.5">Nota gerada</h2>
+    <pre id="saida" class="w-full min-h-[460px] bg-slate-950 border border-slate-700 rounded text-emerald-100 font-mono text-[13px] leading-relaxed p-4 whitespace-pre overflow-x-auto">Preencha os campos acima e clique em "Gerar nota".</pre>
+    <div class="font-mono text-xs text-emerald-400 min-h-[16px] mt-1.5" id="status" role="status"></div>
+  </section>
+
+  <!--<footer class="mt-8 border-t border-slate-700 pt-3.5 text-xs text-slate-400">
+    Pronto para integração: ao gerar, o formulário monta um objeto JSON (<code class="bg-slate-800 px-1.5 py-0.5 rounded font-mono">coletarDados()</code>) com todos os
+    campos nomeados (<code class="bg-slate-800 px-1.5 py-0.5 rounded font-mono">name</code>/<code class="bg-slate-800 px-1.5 py-0.5 rounded font-mono">id</code> = chave), pronto para
+    <code class="bg-slate-800 px-1.5 py-0.5 rounded font-mono">fetch('/api/notas', {method:'POST', body: JSON.stringify(dados)})</code>
+    em qualquer backend (Node, PHP, Python/Django, .NET) e persistência em banco relacional. Veja o console do
+    navegador (<code class="bg-slate-800 px-1.5 py-0.5 rounded font-mono">window.__ultimaNota</code>) para inspecionar a estrutura.
+  </footer>-->
+
+  <footer class="w-full text-center py-4 text-xs text-slate-500">
+    <p>
+      Desenvolvido por
+      <a href="https://github.com/allanrein" target="_blank" rel="noopener noreferrer" class="font-semibold text-slate-300 hover:text-amber-400 transition-colors underline decoration-slate-600 underline-offset-2">
+        Allan Rein
+      </a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const hoje = new Date();
+  document.getElementById('metaData').textContent =
+    'Emissão: ' + hoje.toLocaleDateString('pt-BR') + ' ' + hoje.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+
+  // ---------- classes Tailwind reutilizadas na montagem dinâmica ----------
+  const CLS_ROW = 'row grid grid-cols-2 sm:grid-cols-[190px_90px_90px_1fr] gap-2.5 sm:items-center py-1.5 border-b border-dashed border-slate-700 last:border-b-0';
+  const CLS_ROLE = 'role text-sm font-semibold text-slate-100 col-span-2 sm:col-span-1';
+  const CLS_INPUT_NUM = 'bg-slate-800 border border-slate-700 rounded text-slate-100 text-sm text-center px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-400 w-full';
+  const CLS_INPUT_TXT = 'bg-slate-800 border border-slate-700 rounded text-slate-100 text-sm px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-400 w-full';
+
+  const CLS_RECURSO_ROW = 'recurso-row flex flex-wrap items-end gap-4 py-2.5 border-b border-dashed border-slate-700 last:border-b-0';
+  const CLS_CHECK_LABEL = 'check flex items-center gap-2 cursor-pointer select-none basis-[230px] flex-none';
+  const CLS_CHECKBOX = 'w-5 h-5 cursor-pointer';
+  const CLS_SUBCAMPO = 'subcampo flex flex-col gap-1 min-w-[130px]';
+  const CLS_SUBCAMPO_LABEL = 'text-[11px] uppercase tracking-wide text-slate-400 m-0';
+
+  const CLS_MATERIAL_ROW = 'material-row grid grid-cols-2 sm:grid-cols-[1fr_1fr_110px_34px] gap-2.5 items-end py-3 border-b border-dashed border-slate-700 last:border-b-0 first:pt-0';
+  const CLS_MAT_FIELD_LABEL = 'text-[11px] uppercase tracking-wide text-slate-400 mb-1.5 block';
+  const CLS_BTN_REMOVE = 'btn-remove-row w-[34px] h-[34px] flex items-center justify-center bg-slate-800 text-red-400 border border-slate-700 rounded text-lg leading-none hover:border-red-400 hover:bg-red-400/10 disabled:opacity-35 disabled:cursor-not-allowed';
+
+  // ---------- definição das funções (linhas dinâmicas) ----------
+  const FUNCOES_INTERNA = [
+    { key: 'mecanico',        label: 'Mecânico' },
+    { key: 'eletrico',        label: 'Elétrico' },
+    { key: 'lubrificador',    label: 'Lubrificador' },
+    { key: 'preditiva',       label: 'Preditiva' },
+    { key: 'producao',        label: 'Produção' }
+  ];
+
+  const FUNCOES_EXTERNA = [
+    { key: 'mecanico',            label: 'Mecânico' },
+    { key: 'eletrico',            label: 'Elétrico' },
+    { key: 'lubrificador',        label: 'Lubrificador' },
+    { key: 'soldador',            label: 'Soldador' },
+    { key: 'caldeireiro',         label: 'Caldeireiro' },
+    { key: 'vigia',               label: 'Vigia' },
+    { key: 'brigadista',          label: 'Brigadista' },
+    { key: 'ajudantesLimpeza',    label: 'Ajudantes de Limpeza' },
+    { key: 'isolamento',          label: 'Isolamento (Criar Escopo)' },
+    { key: 'tecRefrigeracao',     label: 'Téc. Refrigeração' },
+    { key: 'tecEspecializado',    label: 'Téc. Especializado' },
+    { key: 'empresaEspecializada',label: 'Empresa Especializada' }
+  ];
+  // Civil e Pintor removidos por solicitação.
+
+  // recursos: item padrão = checkbox + N sub-campos livres.
+  // um campo pode ser type:'number', 'text' ou 'radio' (com opcoes[]).
+  const RECURSOS = [
+    { key: 'andaime', label: 'Andaime',
+      campos: [
+        { key: 'pontos', label: 'Quant. de pontos', type: 'number' },
+        { key: 'condicaoLinha', label: 'Condição da linha p/ montagem', type: 'radio', opcoes: ['PPG', 'FUN'] }
+      ] },
+    { key: 'munck', label: 'Munck',
+      campos: [{ key: 'hrs', label: 'Hrs', type: 'number' }] },
+    { key: 'guindaste', label: 'Guindaste',
+      campos: [{ key: 'hrs', label: 'Hrs', type: 'number' }, { key: 'toneladas', label: 'Toneladas', type: 'text' }] },
+    { key: 'lift', label: 'Lift',
+      campos: [{ key: 'hrs', label: 'Hrs', type: 'number' }] },
+    { key: 'empilhadeira', label: 'Empilhadeira',
+      campos: [{ key: 'hrs', label: 'Hrs', type: 'number' }] },
+    { key: 'usinagemExterna', label: 'Usinagem Externa',
+      campos: [{ key: 'servico', label: 'Serviço', type: 'text' }, { key: 'ficha', label: 'N° Ficha Movimentação', type: 'text' }] },
+    { key: 'consertoExterno', label: 'Conserto Externo',
+      campos: [{ key: 'servico', label: 'Serviço', type: 'text' }, { key: 'ficha', label: 'N° Ficha Movimentação', type: 'text' }] }
+  ];
+
+  const NRS = [
+    { key: 'nr33', label: 'NR33' },
+    { key: 'nr35', label: 'NR35' },
+    { key: 'nr10', label: 'NR10' }
+  ];
+
+  function montarLinhaObra(container, item, prefixo){
+    const row = document.createElement('div');
+    row.className = CLS_ROW;
+    row.innerHTML =
+      '<span class="' + CLS_ROLE + '">' + item.label + '</span>' +
+      '<input type="number" min="0" step="1" id="' + prefixo + '_qtd_' + item.key + '" class="' + CLS_INPUT_NUM + '" aria-label="Quantidade — ' + item.label + ' (' + prefixo + ')">' +
+      '<input type="number" min="0" step="0.5" id="' + prefixo + '_hrs_' + item.key + '" class="' + CLS_INPUT_NUM + '" aria-label="Horas — ' + item.label + ' (' + prefixo + ')">' +
+      '<input type="text" id="' + prefixo + '_serv_' + item.key + '" class="' + CLS_INPUT_TXT + '" placeholder="Serviço" aria-label="Serviço — ' + item.label + ' (' + prefixo + ')">';
+    container.appendChild(row);
+  }
+
+  const internaEl = document.getElementById('interna');
+  FUNCOES_INTERNA.forEach(f => montarLinhaObra(internaEl, f, 'int'));
+
+  const externaEl = document.getElementById('externa');
+  FUNCOES_EXTERNA.forEach(f => montarLinhaObra(externaEl, f, 'ext'));
+
+  const recursosEl = document.getElementById('recursos');
+  function montarRecursoRow(item){
+    const row = document.createElement('div');
+    row.className = CLS_RECURSO_ROW;
+
+    const camposHtml = (item.campos || []).map(c => {
+      if (c.type === 'radio'){
+        const opcoesHtml = c.opcoes.map(o =>
+          '<label class="flex items-center gap-1.5 text-sm cursor-pointer select-none">' +
+            '<input type="radio" name="rec_' + item.key + '_' + c.key + '" value="' + o + '" id="rec_' + item.key + '_' + c.key + '_' + o + '" class="' + CLS_CHECKBOX + '"> ' + o +
+          '</label>'
+        ).join('');
+        return '<div class="' + CLS_SUBCAMPO + '">' +
+          '<label class="' + CLS_SUBCAMPO_LABEL + '">' + c.label + '</label>' +
+          '<div class="flex items-center gap-3">' + opcoesHtml + '</div>' +
+        '</div>';
+      }
+      return '<div class="' + CLS_SUBCAMPO + '"><label for="rec_' + item.key + '_' + c.key + '" class="' + CLS_SUBCAMPO_LABEL + '">' + c.label + '</label>' +
+        '<input type="' + c.type + '" id="rec_' + item.key + '_' + c.key + '" class="' + CLS_INPUT_TXT + '"' + (c.type === 'number' ? ' min="0" step="0.5"' : '') + '></div>';
+    }).join('');
+
+    row.innerHTML =
+      '<label class="' + CLS_CHECK_LABEL + '" for="rec_' + item.key + '_chk">' +
+        '<input type="checkbox" id="rec_' + item.key + '_chk" class="' + CLS_CHECKBOX + '"><span class="role text-sm font-semibold">' + item.label + '</span>' +
+      '</label>' + camposHtml;
+    recursosEl.appendChild(row);
+  }
+  RECURSOS.forEach(montarRecursoRow);
+
+  const nrsListEl = document.getElementById('nrsList');
+  NRS.forEach(n => {
+    const label = document.createElement('label');
+    label.className = 'check flex items-center gap-2 cursor-pointer select-none font-semibold text-sm';
+    label.setAttribute('for', 'nr_' + n.key);
+    label.innerHTML = '<input type="checkbox" id="nr_' + n.key + '" class="' + CLS_CHECKBOX + '"> ' + n.label;
+    nrsListEl.appendChild(label);
+  });
+
+  // ---------- linhas repetíveis de material (botão +) ----------
+  const materiaisCadastroEl = document.getElementById('materiaisCadastro');
+  const materiaisSemCadastroEl = document.getElementById('materiaisSemCadastro');
+  let contCad = 0;
+  let contSemCad = 0;
+
+  function atualizarBotoesRemover(container){
+    const linhas = container.querySelectorAll('.material-row');
+    linhas.forEach(l => {
+      const btn = l.querySelector('.btn-remove-row');
+      btn.disabled = linhas.length <= 1;
+    });
+  }
+
+  function addMaterialCadastroRow(){
+    const idx = contCad++;
+    const row = document.createElement('div');
+    row.className = CLS_MATERIAL_ROW;
+    row.innerHTML =
+      '<div><label for="matcad_codigo_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Código SAP</label>' +
+        '<input type="text" id="matcad_codigo_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="codigoSap" inputmode="numeric"></div>' +
+      '<div><label for="matcad_desc_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Descrição</label>' +
+        '<input type="text" id="matcad_desc_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="descricao"></div>' +
+      '<div><label for="matcad_qtd_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Quantidade</label>' +
+        '<input type="number" id="matcad_qtd_' + idx + '" class="' + CLS_INPUT_NUM + '" data-field="quantidade" min="0" step="1"></div>' +
+      '<button type="button" class="' + CLS_BTN_REMOVE + '" aria-label="Remover este material">×</button>';
+    row.querySelector('.btn-remove-row').addEventListener('click', function(){
+      if (materiaisCadastroEl.querySelectorAll('.material-row').length <= 1) return;
+      row.remove();
+      atualizarBotoesRemover(materiaisCadastroEl);
+    });
+    materiaisCadastroEl.appendChild(row);
+    atualizarBotoesRemover(materiaisCadastroEl);
+  }
+
+  function addMaterialSemCadastroRow(){
+    const idx = contSemCad++;
+    const row = document.createElement('div');
+    row.className = CLS_MATERIAL_ROW;
+    row.innerHTML =
+      '<div><label for="matsc_id_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">N° da ID (Solicitação)</label>' +
+        '<input type="text" id="matsc_id_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="idStruxure"></div>' +
+      '<div><label for="matsc_desc_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Descrição</label>' +
+        '<input type="text" id="matsc_desc_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="descricao"></div>' +
+      '<div><label for="matsc_qtd_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Quantidade</label>' +
+        '<input type="number" id="matsc_qtd_' + idx + '" class="' + CLS_INPUT_NUM + '" data-field="quantidade" min="0" step="1"></div>' +
+      '<button type="button" class="' + CLS_BTN_REMOVE + '" aria-label="Remover este material">×</button>';
+    row.querySelector('.btn-remove-row').addEventListener('click', function(){
+      if (materiaisSemCadastroEl.querySelectorAll('.material-row').length <= 1) return;
+      row.remove();
+      atualizarBotoesRemover(materiaisSemCadastroEl);
+    });
+    materiaisSemCadastroEl.appendChild(row);
+    atualizarBotoesRemover(materiaisSemCadastroEl);
+  }
+
+  addMaterialCadastroRow();
+  addMaterialSemCadastroRow();
+
+  document.getElementById('btnAddCadastro').addEventListener('click', addMaterialCadastroRow);
+  document.getElementById('btnAddSemCadastro').addEventListener('click', addMaterialSemCadastroRow);
+
+  function lerLinhasMaterial(container){
+    const linhas = [];
+    container.querySelectorAll('.material-row').forEach(row => {
+      const item = {};
+      let temAlgo = false;
+      row.querySelectorAll('[data-field]').forEach(input => {
+        const v = input.value.trim();
+        item[input.dataset.field] = v;
+        if (v) temAlgo = true;
+      });
+      if (temAlgo) linhas.push(item);
+    });
+    return linhas;
+  }
+
+  // ---------- coleta de dados ----------
+  function val(id){
+    const el = document.getElementById(id);
+    if (!el) return '';
+    return el.value.trim();
+  }
+  function chk(id){
+    const el = document.getElementById(id);
+    return el ? el.checked : false;
+  }
+  // lê o valor de um sub-campo de recurso (número/texto = input direto; radio = opção marcada do grupo)
+  function valorCampo(itemKey, campo){
+    if (campo.type === 'radio'){
+      const el = document.querySelector('input[name="rec_' + itemKey + '_' + campo.key + '"]:checked');
+      return el ? el.value : '';
+    }
+    return val('rec_' + itemKey + '_' + campo.key);
+  }
+
+  function coletarDados(){
+    const dados = {
+      avaria: val('avaria'),
+      trabalho: val('trabalho'),
+      tagBloqueio: val('tagBloqueio'),
+      maoObraInterna: FUNCOES_INTERNA.map(f => ({
+        funcao: f.label,
+        chave: f.key,
+        qtd:  val('int_qtd_'  + f.key),
+        hrs:  val('int_hrs_'  + f.key),
+        servico: val('int_serv_' + f.key)
+      })),
+      maoObraExterna: FUNCOES_EXTERNA.map(f => ({
+        funcao: f.label,
+        chave: f.key,
+        qtd:  val('ext_qtd_'  + f.key),
+        hrs:  val('ext_hrs_'  + f.key),
+        servico: val('ext_serv_' + f.key)
+      })),
+      contratarPacote: chk('pacoteChk'),
+      recursos: RECURSOS.map(r => ({
+        recurso: r.label,
+        chave: r.key,
+        marcado: chk('rec_' + r.key + '_chk'),
+        campos: (r.campos || []).map(c => ({
+          chave: c.key,
+          label: c.label,
+          valor: valorCampo(r.key, c)
+        }))
+      })),
+      nrsObrigatorias: NRS.map(n => ({
+        nr: n.label,
+        chave: n.key,
+        marcado: chk('nr_' + n.key)
+      })),
+      tempoTotalHrs: val('tempoTotal'),
+      materiaisComCadastro: lerLinhasMaterial(materiaisCadastroEl),
+      materiaisSemCadastro: lerLinhasMaterial(materiaisSemCadastroEl),
+      ferramentasArauco: val('ferramentasArauco').split('\n').map(s => s.trim()).filter(Boolean),
+      ferramentasAlugadas: val('ferramentasAlugadas').split('\n').map(s => s.trim()).filter(Boolean),
+      historico: val('historico').split('\n').map(s => s.trim()).filter(Boolean),
+      geradoEm: new Date().toISOString()
+    };
+    return dados;
+  }
+  window.coletarDados = coletarDados;
+
+  // ---------- geração do texto no formato da nota ----------
+  function linhaObra(item, prefixo, larguraLabel){
+    const qtd = val(prefixo + '_qtd_' + item.key);
+    const hrs = val(prefixo + '_hrs_' + item.key);
+    const serv = val(prefixo + '_serv_' + item.key);
+    if (!qtd) return null; // sem quantidade preenchida: linha omitida, mesmo com horas/serviço
+
+    const rotulo = ('- ' + item.label.toUpperCase() + ':').padEnd(larguraLabel, ' ');
+    const qtdStr = '( ' + qtd + ' )';
+    const hrsStr = 'HRS: ( ' + (hrs || ' ') + ' )';
+    const servStr = 'SERVIÇO: ' + (serv || '');
+    return rotulo + '  ' + qtdStr.padEnd(9, ' ') + '  ' + hrsStr.padEnd(14, ' ') + '  ' + servStr;
+  }
+
+  function gerarTexto(){
+    const d = coletarDados();
+    const blocos = [];
+
+    if (d.avaria) blocos.push('*DESCRIÇÃO DA AVARIA:\n- ' + d.avaria);
+    if (d.trabalho) blocos.push('*TRABALHO A SER EXECUTADO:\n- ' + d.trabalho);
+    if (d.tagBloqueio) blocos.push('*TAG EM BLOQUEIO:\n- ' + d.tagBloqueio);
+
+    const linhasInterna = [];
+    FUNCOES_INTERNA.forEach(f => {
+      const l = linhaObra(f, 'int', 20);
+      if (l) linhasInterna.push(l);
+    });
+    if (linhasInterna.length) blocos.push('*MÃO DE OBRA INTERNA (ARAUCO)/ HRS:\n' + linhasInterna.join('\n'));
+
+    const linhasExterna = [];
+    FUNCOES_EXTERNA.forEach(f => {
+      const l = linhaObra(f, 'ext', 28);
+      if (l) linhasExterna.push(l);
+    });
+    if (chk('pacoteChk')){
+      linhasExterna.push(('- CONTRATAR PACOTE:').padEnd(28, ' ') + '  ( X )  SIM (ANEXAR ESCOPO DA NOTA)');
+    }
+    if (linhasExterna.length) blocos.push('*MÃO DE OBRA EXTERNA (TERCEIRO)/ HRS:\n' + linhasExterna.join('\n'));
+
+    const linhasRecursos = [];
+    RECURSOS.forEach(r => {
+      const marcado = chk('rec_' + r.key + '_chk');
+      if (!marcado) return; // só entra na nota se o checkbox estiver marcado
+      const camposComValor = (r.campos || []).map(c => ({ ...c, valor: valorCampo(r.key, c) }));
+      const marca = '( X )';
+      const camposTxt = camposComValor
+        .filter(c => c.valor)
+        .map(c => {
+          if (c.type === 'radio'){
+            const marcas = c.opcoes.map(o => o + ' ( ' + (o === c.valor ? 'X' : ' ') + ' )').join('  ');
+            return c.label.toUpperCase() + ': ' + marcas;
+          }
+          return c.label.toUpperCase() + ': ' + c.valor;
+        })
+        .join('   ');
+      const rotulo = ('- ' + r.label.toUpperCase() + ':').padEnd(22, ' ');
+      linhasRecursos.push(rotulo + '  ' + marca + (camposTxt ? '  ' + camposTxt : ''));
+    });
+    if (linhasRecursos.length) blocos.push('*RECURSOS / HORAS:\n' + linhasRecursos.join('\n'));
+
+    const linhasNrs = [];
+    NRS.forEach(n => {
+      if (chk('nr_' + n.key)) linhasNrs.push(('- ' + n.label + ':').padEnd(10, ' ') + '( X )');
+    });
+    if (linhasNrs.length) blocos.push('*NRS OBRIGATÓRIAS:\n' + linhasNrs.join('\n'));
+
+    if (d.tempoTotalHrs) blocos.push('*TEMPO TOTAL DO SERVIÇO: ( ' + d.tempoTotalHrs + ' ) HRS');
+
+    if (d.materiaisComCadastro.length){
+      const linhasMat = d.materiaisComCadastro.map(m =>
+        '- CÓDIGO SAP: ' + (m.codigoSap || '') +
+        '     DESCRIÇÃO: ' + (m.descricao || '') +
+        '     QUANT.: ( ' + (m.quantidade || ' ') + ' )'
+      );
+      blocos.push('*MATERIAL COM CADASTRO:\n' + linhasMat.join('\n'));
+    }
+
+    if (d.materiaisSemCadastro.length){
+      const linhasMat = d.materiaisSemCadastro.map(m =>
+        '- N° DA ID (STRUXURE): ' + (m.idStruxure || '') +
+        '     DESCRIÇÃO: ' + (m.descricao || '') +
+        '     QUANT.: ( ' + (m.quantidade || ' ') + ' )'
+      );
+      blocos.push('*MATERIAL SEM CADASTRO:\n' + linhasMat.join('\n'));
+    }
+
+    if (d.ferramentasArauco.length){
+      blocos.push('*LISTA DE FERRAMENTAS ARAUCO:\n' + d.ferramentasArauco.map(i => '- ' + i).join('\n'));
+    }
+
+    if (d.ferramentasAlugadas.length){
+      blocos.push('*LISTA DE FERRAMENTAS A SER ALUGADA:\n' + d.ferramentasAlugadas.map(i => '- ' + i).join('\n'));
+    }
+
+    if (d.historico.length){
+      blocos.push('***HISTÓRICO***:\n' + d.historico.map(i => '- ' + i).join('\n'));
+    }
+
+    if (!blocos.length) return 'Nenhum campo preenchido ainda.';
+    return blocos.join('\n\n');
+  }
+
+  // ---------- eventos ----------
+  const saida = document.getElementById('saida');
+  const status = document.getElementById('status');
+
+  // Uso de type="button" (não "submit") propositalmente: evita qualquer
+  // submissão/recarregamento nativo do <form>, que em alguns visualizadores
+  // sandboxed impede o texto de aparecer. Toda a lógica roda só em JS.
+  function handleGerar(e){
+    if (e) e.preventDefault();
+    try{
+      const texto = gerarTexto();
+      saida.textContent = texto;
+      window.__ultimaNota = coletarDados();
+      //status.textContent = 'Nota gerada em ' + new Date().toLocaleTimeString('pt-BR') + '. Dados também disponíveis em window.__ultimaNota (JSON) para envio a um backend.';
+	status.textContent = 'Nota gerada em ' + new Date().toLocaleTimeString('pt-BR') + '.';
+
+      if (typeof saida.scrollIntoView === 'function'){
+        saida.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    } catch(err){
+      status.textContent = 'Erro ao gerar a nota: ' + err.message;
+      console.error(err);
+    }
+  }
+
+  document.getElementById('btnGerar').addEventListener('click', handleGerar);
+
+  document.getElementById('notaForm').addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && e.target.tagName === 'INPUT'){
+      e.preventDefault();
+      handleGerar();
+    }
+  });
+
+  document.getElementById('btnCopiar').addEventListener('click', function(){
+    const texto = saida.textContent;
+    if (!texto || texto.startsWith('Preencha')){
+      status.textContent = 'Gere a nota antes de copiar.';
+      return;
+    }
+    navigator.clipboard.writeText(texto).then(function(){
+      status.textContent = 'Texto copiado para a área de transferência.';
+    }, function(){
+      status.textContent = 'Não foi possível copiar automaticamente. Selecione o texto manualmente.';
+    });
+  });
+
+  document.getElementById('btnBaixar').addEventListener('click', function(){
+    const texto = saida.textContent;
+    if (!texto || texto.startsWith('Preencha')){
+      status.textContent = 'Gere a nota antes de baixar.';
+      return;
+    }
+    const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'nota_sap_' + new Date().toISOString().slice(0,10) + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    status.textContent = 'Arquivo .txt baixado.';
+  });
+
+  document.getElementById('btnLimpar').addEventListener('click', function(){
+    if (!confirm('Limpar todos os campos do formulário?')) return;
+    document.getElementById('notaForm').reset();
+    materiaisCadastroEl.innerHTML = '';
+    materiaisSemCadastroEl.innerHTML = '';
+    contCad = 0;
+    contSemCad = 0;
+    addMaterialCadastroRow();
+    addMaterialSemCadastroRow();
+    saida.textContent = 'Preencha os campos acima e clique em "Gerar nota".';
+    status.textContent = 'Formulário limpo.';
+  });
+
+})();
+</script>
+</body>
+</html>
