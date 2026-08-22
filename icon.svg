@@ -1,0 +1,71 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gearGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2b3a55"/>
+      <stop offset="55%" stop-color="#141a24"/>
+      <stop offset="100%" stop-color="#0b0e14"/>
+    </linearGradient>
+    <linearGradient id="pageGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#eef1f6"/>
+    </linearGradient>
+    <linearGradient id="spineGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#2f5aa8"/>
+      <stop offset="100%" stop-color="#4d7fce"/>
+    </linearGradient>
+    <radialGradient id="sparkGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- fundo branco levemente arredondado, coerente com favicon -->
+  <rect width="512" height="512" rx="96" fill="#f4f6fa"/>
+
+  <!-- engrenagem -->
+  <g transform="translate(256,266)">
+    <path fill="url(#gearGrad)" d="
+      M -18 -206 L 18 -206 L 28 -160 C 46 -155 63 -148 79 -139 L 118 -164
+      L 146 -136 L 121 -97 C 130 -81 137 -64 142 -46 L 188 -36 L 188 0
+      L 142 10 C 137 28 130 45 121 61 L 146 100 L 118 128 L 79 103
+      C 63 112 46 119 28 124 L 18 170 L -18 170 L -28 124
+      C -46 119 -63 112 -79 103 L -118 128 L -146 100 L -121 61
+      C -130 45 -137 28 -142 10 L -188 0 L -188 -36 L -142 -46
+      C -137 -64 -130 -81 -121 -97 L -146 -136 L -118 -164 L -79 -139
+      C -63 -148 -46 -155 -28 -160 Z"
+    />
+  </g>
+
+  <!-- documento -->
+  <g>
+    <path d="M 176 148 L 176 400 Q 176 412 188 412 L 356 412 Q 368 412 368 400
+             L 368 232 L 292 156 Q 288 148 280 148 Z"
+          fill="url(#pageGrad)" stroke="#c7cfdb" stroke-width="3"/>
+    <!-- dobra do canto -->
+    <path d="M 292 156 L 292 220 Q 292 232 304 232 L 368 232 Z" fill="#dbe2ec"/>
+    <!-- lombada azul -->
+    <rect x="176" y="148" width="20" height="264" fill="url(#spineGrad)"/>
+
+    <!-- linhas de texto -->
+    <g fill="#c3cbd8">
+      <rect x="212" y="212" width="128" height="12" rx="6"/>
+      <rect x="212" y="240" width="128" height="12" rx="6"/>
+      <rect x="212" y="268" width="128" height="12" rx="6"/>
+      <rect x="212" y="296" width="128" height="12" rx="6"/>
+      <rect x="212" y="324" width="128" height="12" rx="6"/>
+      <rect x="212" y="352" width="96" height="12" rx="6"/>
+    </g>
+  </g>
+
+  <!-- varinha mágica cruzando o canto inferior direito do documento -->
+  <g transform="translate(300,398) rotate(-45)">
+    <rect x="0" y="-8" width="150" height="16" rx="8" fill="#1b2431"/>
+    <polygon points="150,-14 168,0 150,14" fill="#c7cfdb"/>
+  </g>
+
+  <!-- brilho de "gerado" -->
+  <g transform="translate(352,232)">
+    <circle r="34" fill="url(#sparkGlow)"/>
+    <path d="M 0 -30 L 8 -8 L 30 0 L 8 8 L 0 30 L -8 8 L -30 0 L -8 -8 Z" fill="#ffffff"/>
+  </g>
+</svg>

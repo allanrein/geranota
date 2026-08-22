@@ -4,6 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nota SAP — Solicitação de Manutenção</title>
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="apple-touch-icon" href="assets/icon-256.png">
+
+<!-- Google Analytics (GA4) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7GN1BN0DCT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-7GN1BN0DCT');
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -26,55 +39,55 @@
   ::selection{ background: rgba(242,167,27,.35); }
 </style>
 </head>
-<body class="min-h-screen bg-slate-950 text-slate-100 font-sans leading-relaxed [background-image:linear-gradient(180deg,rgba(242,167,27,0.06),transparent_220px)] px-4 py-8 sm:py-0">
-<div class="max-w-[1000px] mx-auto pb-0">
+<body class="min-h-screen bg-slate-950 text-slate-100 font-sans leading-relaxed [background-image:linear-gradient(180deg,rgba(242,167,27,0.06),transparent_220px)] px-4 py-8 sm:py-10">
+<div class="max-w-[1000px] mx-auto pb-16">
 
-  <header class="flex items-end justify-between gap-4 flex-wrap border-b-[3px] border-amber-400 pb-3.5 mb-7">
+  <header class="flex items-end justify-between gap-4 flex-wrap border-b-[3px] border-amber-400 pb-2.5 mb-5">
     <div>
       <span class="font-mono text-xs tracking-[.12em] text-amber-400 uppercase">Manutenção · Solicitação de Serviço</span>
-      <h1 class="mt-1 text-2xl sm:text-3xl font-bold tracking-tight">Nota SAP</h1>
+      <h1 class="mt-1 text-2xl sm:text-3xl font-bold tracking-tight">Nota SAP — Ordem de Manutenção</h1>
     </div>
     <div class="font-mono text-xs text-slate-400 text-right" id="metaData"></div>
   </header>
 
-  <form id="notaForm" novalidate class="flex flex-col gap-5">
+  <form id="notaForm" novalidate class="flex flex-col gap-3">
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">01</span>Descrição da Avaria</legend>
       <div>
-        <label for="avaria" class="block text-sm text-slate-400 mb-1.5">Descreva a falha identificada</label>
-        <textarea id="avaria" name="avaria" class="w-full min-h-[64px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+        <label for="avaria" class="block text-sm text-slate-400 mb-1">Descreva a falha identificada</label>
+        <textarea id="avaria" name="avaria" class="w-full min-h-[52px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
       </div>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">02</span>Trabalho a Ser Executado</legend>
       <div>
-        <label for="trabalho" class="block text-sm text-slate-400 mb-1.5">Descreva o serviço a ser realizado</label>
-        <textarea id="trabalho" name="trabalho" class="w-full min-h-[64px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+        <label for="trabalho" class="block text-sm text-slate-400 mb-1">Descreva o serviço a ser realizado</label>
+        <textarea id="trabalho" name="trabalho" class="w-full min-h-[52px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
       </div>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">03</span>Tag em Bloqueio</legend>
       <div>
-        <label for="tagBloqueio" class="block text-sm text-slate-400 mb-1.5">Tag do equipamento bloqueado</label>
-        <input type="text" id="tagBloqueio" name="tagBloqueio" placeholder="Ex.: área 1 ou tag do motor"
+        <label for="tagBloqueio" class="block text-sm text-slate-400 mb-1">Tag do equipamento bloqueado</label>
+        <input type="text" id="tagBloqueio" name="tagBloqueio" placeholder="Ex.: Área 1 ou tag do motor"
                class="w-full bg-slate-800 border border-slate-700 rounded text-slate-100 text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400">
       </div>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">04</span>Mão de Obra Interna (Arauco) / Hrs</legend>
-      <div class="hidden sm:grid grid-cols-[190px_90px_90px_1fr] gap-2.5 text-[11px] uppercase tracking-wide text-slate-400 pb-2 border-b border-slate-700 mb-2.5">
+      <div class="hidden sm:grid grid-cols-[190px_90px_90px_1fr] gap-2 text-[11px] uppercase tracking-wide text-slate-400 pb-1.5 border-b border-slate-700 mb-1">
         <span>Função</span><span>Qtd.</span><span>Hrs</span><span>Serviço</span>
       </div>
       <div id="interna"></div>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">05</span>Mão de Obra Externa (Terceiro) / Hrs</legend>
-      <div class="hidden sm:grid grid-cols-[190px_90px_90px_1fr] gap-2.5 text-[11px] uppercase tracking-wide text-slate-400 pb-2 border-b border-slate-700 mb-2.5">
+      <div class="hidden sm:grid grid-cols-[190px_90px_90px_1fr] gap-2 text-[11px] uppercase tracking-wide text-slate-400 pb-1.5 border-b border-slate-700 mb-1">
         <span>Função</span><span>Qtd.</span><span>Hrs</span><span>Serviço</span>
       </div>
       <div id="externa"></div>
@@ -86,94 +99,88 @@
       </div>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">06</span>Recursos / Horas</legend>
       <div id="recursos"></div>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">07</span>NRs Obrigatórias</legend>
       <div class="flex flex-wrap gap-5" id="nrsList"></div>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">08</span>Tempo Total do Serviço</legend>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-3 flex-wrap">
         <label for="tempoTotal" class="text-sm text-slate-400 m-0">Horas totais</label>
         <input type="number" id="tempoTotal" name="tempoTotal" min="0" step="0.5"
-               class="w-[110px] bg-slate-800 border border-slate-700 rounded text-slate-100 text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400">
+               class="w-[110px] bg-slate-800 border border-slate-700 rounded text-slate-100 text-sm px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-400 invalid:border-red-500 invalid:ring-1 invalid:ring-red-500">
+        <button type="button" id="btnUsarSugestaoHrs"
+                class="text-xs font-semibold px-3 py-1.5 rounded border border-dashed border-sky-400 text-sky-400 hover:bg-sky-400/10">Usar sugestão</button>
+        <span class="font-mono text-xs text-slate-400" id="sugestaoHorasHint">Maior valor de horas preenchido na mão de obra: 0 hrs</span>
       </div>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">09</span>Material com Cadastro</legend>
       <div id="materiaisCadastro"></div>
       <button type="button" id="btnAddCadastro"
               class="mt-3 bg-transparent text-sky-400 border border-dashed border-sky-400 rounded px-4 py-2 text-sm hover:bg-sky-400/10">+ Adicionar material</button>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">10</span>Material sem Cadastro</legend>
-      <!--<div class="font-mono text-xs text-slate-400 -mt-1 mb-3">N° da ID (Solicitação) · Descrição · Quantidade</div>-->
       <div id="materiaisSemCadastro"></div>
       <button type="button" id="btnAddSemCadastro"
               class="mt-3 bg-transparent text-sky-400 border border-dashed border-sky-400 rounded px-4 py-2 text-sm hover:bg-sky-400/10">+ Adicionar material</button>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">11</span>Lista de Ferramentas Arauco</legend>
       <div>
-        <label for="ferramentasArauco" class="block text-sm text-slate-400 mb-1.5">Uma ferramenta por linha</label>
+        <label for="ferramentasArauco" class="block text-sm text-slate-400 mb-1">Uma ferramenta por linha</label>
         <textarea id="ferramentasArauco" name="ferramentasArauco" placeholder="Ex.: Chave de torque&#10;Multímetro"
-                  class="w-full min-h-[64px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+                  class="w-full min-h-[52px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
       </div>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">12</span>Lista de Ferramentas a Ser Alugada</legend>
       <div>
-        <label for="ferramentasAlugadas" class="block text-sm text-slate-400 mb-1.5">Uma ferramenta por linha</label>
+        <label for="ferramentasAlugadas" class="block text-sm text-slate-400 mb-1">Uma ferramenta por linha</label>
         <textarea id="ferramentasAlugadas" name="ferramentasAlugadas" placeholder="Ex.: Plataforma elevatória"
-                  class="w-full min-h-[64px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+                  class="w-full min-h-[52px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
       </div>
     </fieldset>
 
-    <fieldset class="bg-slate-900 border border-slate-700 rounded p-4 sm:p-5">
+    <fieldset class="bg-slate-900 border border-slate-700 rounded p-3 sm:p-4">
       <legend class="font-mono text-xs tracking-wider text-amber-400 uppercase px-2"><span class="text-slate-400 mr-1.5">13</span>Histórico</legend>
       <div>
-        <label for="historico" class="block text-sm text-slate-400 mb-1.5">Um registro por linha</label>
+        <label for="historico" class="block text-sm text-slate-400 mb-1">Um registro por linha</label>
         <textarea id="historico" name="historico" placeholder="Ex.: 12/08 — Ocorrência anterior semelhante"
-                  class="w-full min-h-[64px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
+                  class="w-full min-h-[52px] bg-slate-800 border border-slate-700 rounded text-slate-100 font-mono text-sm px-2.5 py-2 focus:outline-none focus:ring-2 focus:ring-sky-400"></textarea>
       </div>
     </fieldset>
 
-    <div class="sticky bottom-0 flex flex-wrap gap-3 pt-4 pb-1 [background:linear-gradient(180deg,transparent,rgb(2_6_23)_35%)]">
+    <div class="sticky bottom-0 flex flex-wrap gap-2 pt-3 pb-1 [background:linear-gradient(180deg,transparent,rgb(2_6_23)_35%)]">
       <button type="button" id="btnGerar"
-              class="font-sans text-sm font-semibold px-5 py-2.5 rounded border border-amber-400 bg-amber-400 text-amber-950 hover:brightness-110 active:translate-y-px transition">Gerar nota</button>
+              class="font-sans text-sm font-semibold px-4 py-2 rounded border border-amber-400 bg-amber-400 text-amber-950 hover:brightness-110 active:translate-y-px transition">Gerar nota</button>
       <button type="button" id="btnCopiar"
-              class="font-sans text-sm font-semibold px-5 py-2.5 rounded border border-slate-700 bg-slate-800 text-slate-100 hover:border-sky-400 active:translate-y-px transition">Copiar texto</button>
+              class="font-sans text-sm font-semibold px-4 py-2 rounded border border-slate-700 bg-slate-800 text-slate-100 hover:border-sky-400 active:translate-y-px transition">Copiar texto</button>
       <button type="button" id="btnBaixar"
-              class="font-sans text-sm font-semibold px-5 py-2.5 rounded border border-slate-700 bg-slate-800 text-slate-100 hover:border-sky-400 active:translate-y-px transition">Baixar .txt</button>
+              class="font-sans text-sm font-semibold px-4 py-2 rounded border border-slate-700 bg-slate-800 text-slate-100 hover:border-sky-400 active:translate-y-px transition">Baixar .txt</button>
       <button type="button" id="btnLimpar"
-              class="font-sans text-sm font-semibold px-5 py-2.5 rounded border border-red-400 bg-transparent text-red-400 hover:bg-red-400/10 active:translate-y-px transition ml-auto">Limpar formulário</button>
+              class="font-sans text-sm font-semibold px-4 py-2 rounded border border-red-400 bg-transparent text-red-400 hover:bg-red-400/10 active:translate-y-px transition ml-auto">Limpar formulário</button>
     </div>
   </form>
 
   <section class="mt-4" aria-live="polite">
-    <h2 class="font-mono text-xs tracking-wider uppercase text-sky-400 mb-2.5">Nota gerada</h2>
-    <pre id="saida" class="w-full min-h-[460px] bg-slate-950 border border-slate-700 rounded text-emerald-100 font-mono text-[13px] leading-relaxed p-4 whitespace-pre overflow-x-auto">Preencha os campos acima e clique em "Gerar nota".</pre>
+    <h2 class="font-mono text-xs tracking-wider uppercase text-sky-400 mb-1">Nota gerada</h2>
+    <pre id="saida" class="w-full min-h-[360px] bg-slate-950 border border-slate-700 rounded text-emerald-100 font-mono text-[13px] leading-relaxed p-3 whitespace-pre overflow-x-auto">Preencha os campos acima e clique em "Gerar nota".</pre>
     <div class="font-mono text-xs text-emerald-400 min-h-[16px] mt-1.5" id="status" role="status"></div>
   </section>
 
-  <!--<footer class="mt-8 border-t border-slate-700 pt-3.5 text-xs text-slate-400">
-    Pronto para integração: ao gerar, o formulário monta um objeto JSON (<code class="bg-slate-800 px-1.5 py-0.5 rounded font-mono">coletarDados()</code>) com todos os
-    campos nomeados (<code class="bg-slate-800 px-1.5 py-0.5 rounded font-mono">name</code>/<code class="bg-slate-800 px-1.5 py-0.5 rounded font-mono">id</code> = chave), pronto para
-    <code class="bg-slate-800 px-1.5 py-0.5 rounded font-mono">fetch('/api/notas', {method:'POST', body: JSON.stringify(dados)})</code>
-    em qualquer backend (Node, PHP, Python/Django, .NET) e persistência em banco relacional. Veja o console do
-    navegador (<code class="bg-slate-800 px-1.5 py-0.5 rounded font-mono">window.__ultimaNota</code>) para inspecionar a estrutura.
-  </footer>-->
-
-  <footer class="w-full text-center py-4 text-xs text-slate-500">
+  <footer class="w-full text-center py-2.5 text-xs text-slate-500">
     <p>
       Desenvolvido por
       <a href="https://github.com/allanrein" target="_blank" rel="noopener noreferrer" class="font-semibold text-slate-300 hover:text-amber-400 transition-colors underline decoration-slate-600 underline-offset-2">
@@ -193,19 +200,19 @@
     'Emissão: ' + hoje.toLocaleDateString('pt-BR') + ' ' + hoje.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
 
   // ---------- classes Tailwind reutilizadas na montagem dinâmica ----------
-  const CLS_ROW = 'row grid grid-cols-2 sm:grid-cols-[190px_90px_90px_1fr] gap-2.5 sm:items-center py-1.5 border-b border-dashed border-slate-700 last:border-b-0';
+  const CLS_ROW = 'row grid grid-cols-2 sm:grid-cols-[190px_90px_90px_1fr] gap-2 sm:items-center py-1 border-b border-dashed border-slate-700 last:border-b-0';
   const CLS_ROLE = 'role text-sm font-semibold text-slate-100 col-span-2 sm:col-span-1';
-  const CLS_INPUT_NUM = 'bg-slate-800 border border-slate-700 rounded text-slate-100 text-sm text-center px-2 py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-400 w-full';
-  const CLS_INPUT_TXT = 'bg-slate-800 border border-slate-700 rounded text-slate-100 text-sm px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-400 w-full';
+  const CLS_INPUT_NUM = 'bg-slate-800 border border-slate-700 rounded text-slate-100 text-sm text-center px-2 py-1 focus:outline-none focus:ring-2 focus:ring-sky-400 invalid:border-red-500 invalid:ring-1 invalid:ring-red-500 w-full';
+  const CLS_INPUT_TXT = 'bg-slate-800 border border-slate-700 rounded text-slate-100 text-sm px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-sky-400 invalid:border-red-500 invalid:ring-1 invalid:ring-red-500 w-full';
 
-  const CLS_RECURSO_ROW = 'recurso-row flex flex-wrap items-end gap-4 py-2.5 border-b border-dashed border-slate-700 last:border-b-0';
+  const CLS_RECURSO_ROW = 'recurso-row flex flex-wrap items-end gap-3 py-1.5 border-b border-dashed border-slate-700 last:border-b-0';
   const CLS_CHECK_LABEL = 'check flex items-center gap-2 cursor-pointer select-none basis-[230px] flex-none';
   const CLS_CHECKBOX = 'w-5 h-5 cursor-pointer';
   const CLS_SUBCAMPO = 'subcampo flex flex-col gap-1 min-w-[130px]';
   const CLS_SUBCAMPO_LABEL = 'text-[11px] uppercase tracking-wide text-slate-400 m-0';
 
-  const CLS_MATERIAL_ROW = 'material-row grid grid-cols-2 sm:grid-cols-[1fr_1fr_110px_34px] gap-2.5 items-end py-3 border-b border-dashed border-slate-700 last:border-b-0 first:pt-0';
-  const CLS_MAT_FIELD_LABEL = 'text-[11px] uppercase tracking-wide text-slate-400 mb-1.5 block';
+  const CLS_MATERIAL_ROW = 'material-row grid grid-cols-2 sm:grid-cols-[1fr_1fr_110px_100px_34px] gap-2 items-end py-2 border-b border-dashed border-slate-700 last:border-b-0 first:pt-0';
+  const CLS_MAT_FIELD_LABEL = 'text-[11px] uppercase tracking-wide text-slate-400 mb-1 block';
   const CLS_BTN_REMOVE = 'btn-remove-row w-[34px] h-[34px] flex items-center justify-center bg-slate-800 text-red-400 border border-slate-700 rounded text-lg leading-none hover:border-red-400 hover:bg-red-400/10 disabled:opacity-35 disabled:cursor-not-allowed';
 
   // ---------- definição das funções (linhas dinâmicas) ----------
@@ -244,7 +251,7 @@
     { key: 'munck', label: 'Munck',
       campos: [{ key: 'hrs', label: 'Hrs', type: 'number' }] },
     { key: 'guindaste', label: 'Guindaste',
-      campos: [{ key: 'hrs', label: 'Hrs', type: 'number' }, { key: 'toneladas', label: 'Toneladas', type: 'text' }] },
+      campos: [{ key: 'hrs', label: 'Hrs', type: 'number' }, { key: 'toneladas', label: 'Toneladas', type: 'number' }] },
     { key: 'lift', label: 'Lift',
       campos: [{ key: 'hrs', label: 'Hrs', type: 'number' }] },
     { key: 'empilhadeira', label: 'Empilhadeira',
@@ -277,6 +284,33 @@
 
   const externaEl = document.getElementById('externa');
   FUNCOES_EXTERNA.forEach(f => montarLinhaObra(externaEl, f, 'ext'));
+
+  // ---------- soma das horas de mão de obra -> sugestão de tempo total ----------
+  const sugestaoHorasHintEl = document.getElementById('sugestaoHorasHint');
+  const tempoTotalEl = document.getElementById('tempoTotal');
+
+  function calcularMaiorHora(){
+    let maior = 0;
+    document.querySelectorAll('#interna input[id^="int_hrs_"], #externa input[id^="ext_hrs_"]').forEach(input => {
+      const n = parseFloat((input.value || '').replace(',', '.'));
+      if (!isNaN(n) && n > maior) maior = n;
+    });
+    return Math.round(maior * 100) / 100;
+  }
+
+  function atualizarSugestaoHoras(){
+    const maior = calcularMaiorHora();
+    const maiorFormatada = String(maior).replace('.', ',');
+    sugestaoHorasHintEl.textContent = 'Maior valor de horas preenchido na mão de obra: ' + maiorFormatada + ' hrs';
+  }
+
+  internaEl.addEventListener('input', atualizarSugestaoHoras);
+  externaEl.addEventListener('input', atualizarSugestaoHoras);
+
+  document.getElementById('btnUsarSugestaoHrs').addEventListener('click', function(){
+    tempoTotalEl.value = calcularMaiorHora();
+    status.textContent = 'Tempo total preenchido com a maior hora informada na mão de obra. Ajuste se necessário.';
+  });
 
   const recursosEl = document.getElementById('recursos');
   function montarRecursoRow(item){
@@ -336,9 +370,11 @@
     row.className = CLS_MATERIAL_ROW;
     row.innerHTML =
       '<div><label for="matcad_codigo_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Código SAP</label>' +
-        '<input type="text" id="matcad_codigo_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="codigoSap" inputmode="numeric"></div>' +
+        '<input type="text" id="matcad_codigo_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="codigoSap" data-num="sap"></div>' +
       '<div><label for="matcad_desc_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Descrição</label>' +
         '<input type="text" id="matcad_desc_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="descricao"></div>' +
+      '<div><label for="matcad_custo_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Custo Unit. (R$)</label>' +
+        '<input type="text" id="matcad_custo_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="custo" data-num="decimal" inputmode="decimal" placeholder="0,00"></div>' +
       '<div><label for="matcad_qtd_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Quantidade</label>' +
         '<input type="number" id="matcad_qtd_' + idx + '" class="' + CLS_INPUT_NUM + '" data-field="quantidade" min="0" step="1"></div>' +
       '<button type="button" class="' + CLS_BTN_REMOVE + '" aria-label="Remover este material">×</button>';
@@ -357,9 +393,11 @@
     row.className = CLS_MATERIAL_ROW;
     row.innerHTML =
       '<div><label for="matsc_id_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">N° da ID (Solicitação)</label>' +
-        '<input type="text" id="matsc_id_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="idStruxure"></div>' +
+        '<input type="text" id="matsc_id_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="idSolicitacao" data-num="int" inputmode="numeric"></div>' +
       '<div><label for="matsc_desc_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Descrição</label>' +
         '<input type="text" id="matsc_desc_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="descricao"></div>' +
+      '<div><label for="matsc_custo_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Custo Unit. (R$)</label>' +
+        '<input type="text" id="matsc_custo_' + idx + '" class="' + CLS_INPUT_TXT + '" data-field="custo" data-num="decimal" inputmode="decimal" placeholder="0,00"></div>' +
       '<div><label for="matsc_qtd_' + idx + '" class="' + CLS_MAT_FIELD_LABEL + '">Quantidade</label>' +
         '<input type="number" id="matsc_qtd_' + idx + '" class="' + CLS_INPUT_NUM + '" data-field="quantidade" min="0" step="1"></div>' +
       '<button type="button" class="' + CLS_BTN_REMOVE + '" aria-label="Remover este material">×</button>';
@@ -377,6 +415,49 @@
 
   document.getElementById('btnAddCadastro').addEventListener('click', addMaterialCadastroRow);
   document.getElementById('btnAddSemCadastro').addEventListener('click', addMaterialSemCadastroRow);
+
+  // ---------- validação de todos os campos numéricos ----------
+  // 1) inputs type="number" (quantidade, hrs, pontos, toneladas, tempo total):
+  //    o navegador já impede letras; aqui bloqueamos "-", "+" e "e" (notação
+  //    científica) e destacamos em vermelho (via classe invalid:) qualquer
+  //    valor que viole o min="0".
+  document.addEventListener('keydown', function(e){
+    if (e.target.matches('input[type="number"]') && ['e', 'E', '+', '-'].includes(e.key)){
+      e.preventDefault();
+    }
+  });
+  document.addEventListener('wheel', function(e){
+    // evita que o usuário mude o valor sem querer rolando o mouse sobre o campo
+    if (e.target.matches('input[type="number"]') && document.activeElement === e.target){
+      e.target.blur();
+    }
+  }, { passive: true });
+
+  // 2) campos de texto que representam números (Código SAP, N° da ID/Solicitação,
+  //    Custo Unit.): filtra caracteres inválidos em tempo real.
+  function sanitizarNumerico(el){
+    const tipo = el.dataset.num;
+    let v = el.value;
+    if (tipo === 'int'){
+      v = v.replace(/[^0-9]/g, '');
+    } else if (tipo === 'decimal'){
+      v = v.replace(/[^0-9.,]/g, '');
+      const partes = v.split(/[.,]/);
+      if (partes.length > 2){
+        const sep = v.includes(',') ? ',' : '.';
+        v = partes[0] + sep + partes.slice(1).join('');
+      }
+    } else if (tipo === 'sap'){
+      // aceita código numérico puro OU iniciado com a letra S (ex.: 833531 ou S12345)
+      v = v.toUpperCase().replace(/[^0-9S]/g, '');
+      const m = v.match(/^S?[0-9]*/);
+      v = m ? m[0] : '';
+    }
+    if (v !== el.value) el.value = v;
+  }
+  document.addEventListener('input', function(e){
+    if (e.target.matches('[data-num]')) sanitizarNumerico(e.target);
+  });
 
   function lerLinhasMaterial(container){
     const linhas = [];
@@ -527,22 +608,51 @@
 
     if (d.tempoTotalHrs) blocos.push('*TEMPO TOTAL DO SERVIÇO: ( ' + d.tempoTotalHrs + ' ) HRS');
 
+    // custo unitário x quantidade = custo do item; formata em BRL
+    function custoItem(m){
+      const unit = parseFloat(String(m.custo || '').replace(',', '.'));
+      const qtd = parseFloat(String(m.quantidade || '').replace(',', '.'));
+      if (isNaN(unit) || isNaN(qtd)) return null;
+      return unit * qtd;
+    }
+    function fmtBRL(n){
+      return n.toFixed(2).replace('.', ',');
+    }
+
     if (d.materiaisComCadastro.length){
-      const linhasMat = d.materiaisComCadastro.map(m =>
-        '- CÓDIGO SAP: ' + (m.codigoSap || '') +
-        '     DESCRIÇÃO: ' + (m.descricao || '') +
-        '     QUANT.: ( ' + (m.quantidade || ' ') + ' )'
-      );
+      const linhasMat = d.materiaisComCadastro.map(m => {
+        const total = custoItem(m);
+        let linha = '- CÓDIGO SAP: ' + (m.codigoSap || '') +
+          '     DESCRIÇÃO: ' + (m.descricao || '') +
+          '     QUANT.: ( ' + (m.quantidade || ' ') + ' )';
+        if (m.custo){
+          linha += '\n  CUSTO UNIT.: R$ ' + m.custo +
+            (total !== null ? '     CUSTO TOTAL: R$ ' + fmtBRL(total) : '');
+        }
+        return linha;
+      });
       blocos.push('*MATERIAL COM CADASTRO:\n' + linhasMat.join('\n'));
     }
 
     if (d.materiaisSemCadastro.length){
-      const linhasMat = d.materiaisSemCadastro.map(m =>
-        '- N° DA ID (STRUXURE): ' + (m.idStruxure || '') +
-        '     DESCRIÇÃO: ' + (m.descricao || '') +
-        '     QUANT.: ( ' + (m.quantidade || ' ') + ' )'
-      );
+      const linhasMat = d.materiaisSemCadastro.map(m => {
+        const total = custoItem(m);
+        let linha = '- N° DA ID (SOLICITAÇÃO): ' + (m.idSolicitacao || '') +
+          '     DESCRIÇÃO: ' + (m.descricao || '') +
+          '     QUANT.: ( ' + (m.quantidade || ' ') + ' )';
+        if (m.custo){
+          linha += '\n  CUSTO UNIT.: R$ ' + m.custo +
+            (total !== null ? '     CUSTO TOTAL: R$ ' + fmtBRL(total) : '');
+        }
+        return linha;
+      });
       blocos.push('*MATERIAL SEM CADASTRO:\n' + linhasMat.join('\n'));
+    }
+
+    const custoTotalGeral = [...d.materiaisComCadastro, ...d.materiaisSemCadastro]
+      .reduce((soma, m) => soma + (custoItem(m) || 0), 0);
+    if (custoTotalGeral > 0){
+      blocos.push('*CUSTO TOTAL ESTIMADO DE MATERIAIS: R$ ' + fmtBRL(custoTotalGeral));
     }
 
     if (d.ferramentasArauco.length){
@@ -565,6 +675,14 @@
   const saida = document.getElementById('saida');
   const status = document.getElementById('status');
 
+  // Envia um evento ao GA4 sem quebrar a página caso o script tenha sido
+  // bloqueado (ad-blocker) ou o Measurement ID ainda não tenha sido configurado.
+  function rastrearEvento(nome, params){
+    if (typeof gtag === 'function'){
+      try { gtag('event', nome, params || {}); } catch(e) { /* silencioso */ }
+    }
+  }
+
   // Uso de type="button" (não "submit") propositalmente: evita qualquer
   // submissão/recarregamento nativo do <form>, que em alguns visualizadores
   // sandboxed impede o texto de aparecer. Toda a lógica roda só em JS.
@@ -574,9 +692,8 @@
       const texto = gerarTexto();
       saida.textContent = texto;
       window.__ultimaNota = coletarDados();
-      //status.textContent = 'Nota gerada em ' + new Date().toLocaleTimeString('pt-BR') + '. Dados também disponíveis em window.__ultimaNota (JSON) para envio a um backend.';
-	status.textContent = 'Nota gerada em ' + new Date().toLocaleTimeString('pt-BR') + '.';
-
+      status.textContent = 'Nota gerada em ' + new Date().toLocaleTimeString('pt-BR') + '.';
+      rastrearEvento('gerar_nota');
       if (typeof saida.scrollIntoView === 'function'){
         saida.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       }
@@ -603,6 +720,7 @@
     }
     navigator.clipboard.writeText(texto).then(function(){
       status.textContent = 'Texto copiado para a área de transferência.';
+      rastrearEvento('copiar_nota');
     }, function(){
       status.textContent = 'Não foi possível copiar automaticamente. Selecione o texto manualmente.';
     });
@@ -624,6 +742,7 @@
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     status.textContent = 'Arquivo .txt baixado.';
+    rastrearEvento('baixar_nota');
   });
 
   document.getElementById('btnLimpar').addEventListener('click', function(){
